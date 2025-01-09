@@ -26,7 +26,7 @@ SUM=$(sha256sum "$DIR/examples/plugin.wasm" | cut -d ' ' -f 1)
 cd $DIR/examples && sqlc -f sqlc.libsql.yaml generate
 cd $DIR/examples/node-libsql && npm install && npx tsc && node src/main.js
 
-
+cp "$DIR/examples/plugin.wasm" "$DIR/sqlc-gen-typescript-libsql.wasm"
 
 echo -e "
 plugins:
