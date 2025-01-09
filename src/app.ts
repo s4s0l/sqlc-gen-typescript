@@ -29,6 +29,7 @@ import {
 
 import { argName, colName } from "./drivers/utlis";
 import { Driver as Sqlite3Driver } from "./drivers/better-sqlite3";
+import { Driver as LibsqlDriver } from "./drivers/libsql";
 import { Driver as PgDriver } from "./drivers/pg";
 import { Driver as PostgresDriver } from "./drivers/postgres";
 import { Mysql2Options, Driver as MysqlDriver } from "./drivers/mysql2";
@@ -43,7 +44,7 @@ writeOutput(result);
 interface Options {
   runtime?: string;
   driver?: string;
-  mysql2?: Mysql2Options
+  mysql2?: Mysql2Options;
 }
 
 interface Driver {
@@ -92,6 +93,9 @@ function createNodeGenerator(options: Options): Driver {
     }
     case "better-sqlite3": {
       return new Sqlite3Driver();
+    }
+    case "libsql": {
+      return new LibsqlDriver();
     }
   }
   throw new Error(`unknown driver: ${options.driver}`);
@@ -237,16 +241,13 @@ function queryDecl(name: string, sql: string) {
   );
 }
 
-function argsDecl(
-  name: string,
-  driver: Driver,
-  params: Parameter[]
-) {
+function argsDecl(name: string, driver: Driver, params: Parameter[]) {
   return factory.createInterfaceDeclaration(
     [factory.createToken(SyntaxKind.ExportKeyword)],
     factory.createIdentifier(name),
     undefined,
     undefined,
+
     params.map((param, i) =>
       factory.createPropertySignature(
         undefined,
@@ -258,11 +259,7 @@ function argsDecl(
   );
 }
 
-function rowDecl(
-  name: string,
-  driver: Driver,
-  columns: Column[]
-) {
+function rowDecl(name: string, driver: Driver, columns: Column[]) {
   return factory.createInterfaceDeclaration(
     [factory.createToken(SyntaxKind.ExportKeyword)],
     factory.createIdentifier(name),

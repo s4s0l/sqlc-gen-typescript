@@ -1,5 +1,14 @@
 # sqlc-gen-typescript
 
+## Story behind this fork
+
+Be aware that this is based on repo that has unclear licensing [see here](https://github.com/sqlc-dev/sqlc-gen-typescript/issues/52).
+
+What I was missing was support for [libsql](https://github.com/tursodatabase/libsql).
+I didn't create PR out of this, because it is waaay to rough around the edges for my liking.
+
+Driver name is 'libsql'.
+
 > [!CAUTION]
 > Here be dragons! This plugin is still in early access. Expect breaking changes, missing functionality, and sub-optimal output. Please report all issues and errors. Good luck!
 

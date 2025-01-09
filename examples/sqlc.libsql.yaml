@@ -1,0 +1,15 @@
+version: "2"
+plugins:
+- name: ts
+  wasm:
+    url: file://plugin.wasm
+sql:
+- schema: "authors/sqlite/schema.sql"
+  queries: "authors/sqlite/query.sql"
+  engine: "sqlite"
+  codegen:
+  - plugin: ts
+    out: node-libsql/src/db
+    options:
+      runtime: node
+      driver: libsql
