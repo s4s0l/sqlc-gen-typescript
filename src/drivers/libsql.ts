@@ -17,10 +17,16 @@ function funcParamsDecl(iface: string | undefined, params: Parameter[]) {
       undefined,
       factory.createIdentifier("database"),
       undefined,
-      factory.createTypeReferenceNode(
-        factory.createIdentifier("Client"),
-        undefined
-      ),
+      factory.createUnionTypeNode([
+        factory.createTypeReferenceNode(
+          factory.createIdentifier("Client"),
+          undefined
+        ),
+        factory.createTypeReferenceNode(
+          factory.createIdentifier("Transaction"),
+          undefined
+        ),
+      ]),
       undefined
     ),
   ];
@@ -130,6 +136,11 @@ export class Driver {
               undefined,
               factory.createIdentifier("Client")
             ),
+            factory.createImportSpecifier(
+              true,
+              undefined,
+              factory.createIdentifier("Transaction")
+            ),
           ])
         ),
         factory.createStringLiteral("@libsql/client"),
@@ -157,7 +168,7 @@ export class Driver {
   ) {
     const funcParams = funcParamsDecl(argIface, params);
 
-    return factory.createFunctionDeclaration(
+    const ret = factory.createFunctionDeclaration(
       [
         factory.createToken(SyntaxKind.ExportKeyword),
         factory.createToken(SyntaxKind.AsyncKeyword),
@@ -226,6 +237,7 @@ export class Driver {
         true
       )
     );
+    return [ret];
   }
 
   oneDecl(

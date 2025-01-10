@@ -55,7 +55,7 @@ interface Driver {
     text: string,
     iface: string | undefined,
     params: Parameter[]
-  ) => Node;
+  ) => Node | Node[];
   execlastidDecl: (
     name: string,
     text: string,
@@ -164,9 +164,17 @@ ${query.text}`
 
       switch (query.cmd) {
         case ":exec": {
-          nodes.push(
-            driver.execDecl(lowerName, textName, argIface, query.params)
+          const x = driver.execDecl(
+            lowerName,
+            textName,
+            argIface,
+            query.params
           );
+          if (Array.isArray(x)) {
+            nodes.push(...x);
+          } else {
+            nodes.push(x);
+          }
           break;
         }
         case ":execlastid": {
