@@ -3,8 +3,10 @@
 import { type Client } from "@libsql/client";
 
 export const getAuthorQuery = `-- name: GetAuthor :one
-SELECT id, name, bio FROM authors
-WHERE id = ? LIMIT 1`;
+SELECT id, name, bio_graphyitis
+FROM authors
+WHERE id = ?
+LIMIT 1`;
 
 export interface GetAuthorArgs {
     id: number;
@@ -13,7 +15,7 @@ export interface GetAuthorArgs {
 export interface GetAuthorRow {
     id: number;
     name: string;
-    bio: string | null;
+    bio_graphyitis: string | null;
 }
 
 export async function getAuthor(database: Client, args: GetAuthorArgs): Promise<GetAuthorRow | null> {
@@ -32,13 +34,14 @@ export async function getAuthor(database: Client, args: GetAuthorArgs): Promise<
 }
 
 export const listAuthorsQuery = `-- name: ListAuthors :many
-SELECT id, name, bio FROM authors
+SELECT id, name, bio_graphyitis
+FROM authors
 ORDER BY name`;
 
 export interface ListAuthorsRow {
     id: number;
     name: string;
-    bio: string | null;
+    bio_graphyitis: string | null;
 }
 
 export async function listAuthors(database: Client): Promise<ListAuthorsRow[]> {
@@ -50,21 +53,18 @@ export async function listAuthors(database: Client): Promise<ListAuthorsRow[]> {
 }
 
 export const createAuthorQuery = `-- name: CreateAuthor :exec
-INSERT INTO authors (
-  name, bio
-) VALUES (
-  ?, ?
-)`;
+INSERT INTO authors (name, bio_graphyitis)
+VALUES (?, ?)`;
 
 export interface CreateAuthorArgs {
     name: string;
-    bio: string | null;
+    bio_graphyitis: string | null;
 }
 
 export async function createAuthor(database: Client, args: CreateAuthorArgs): Promise<number> {
     const ret = await database.execute({
         sql: createAuthorQuery,
-        args: [args.name, args.bio]
+        args: [args.name, args.bio_graphyitis]
     });
     return ret.rowsAffected;
 }

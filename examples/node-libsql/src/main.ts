@@ -7,12 +7,16 @@ import {
   deleteAuthor,
   getAuthor,
   listAuthors,
+  ListAuthorsRow,
 } from "./db/query_sql";
 
-interface Author {
-  id: string;
-  name: string;
-  bio: string | null;
+function checkAuthor(author: ListAuthorsRow) {
+  if (author.name !== "Seal") {
+    throw new Error("expected author to be Seal");
+  }
+  if (author.bio_graphyitis !== "Kissed from a rose") {
+    throw new Error("expected author to have bio");
+  }
 }
 
 async function main() {
@@ -30,12 +34,17 @@ async function main() {
   // Create an author
   await createAuthor(database, {
     name: "Seal",
-    bio: "Kissed from a rose",
+    bio_graphyitis: "Kissed from a rose",
   });
 
   // List the authors
   const authors = await listAuthors(database);
   console.log(authors);
+  if (authors.length !== 1) {
+    throw new Error("expected one author");
+  }
+
+  checkAuthor(authors[0]);
 
   // Get that author
   const seal = await getAuthor(database, { id: authors[0].id });
@@ -43,7 +52,7 @@ async function main() {
     throw new Error("seal not found");
   }
   console.log(seal);
-
+  checkAuthor(seal);
   // Delete the author
   const deleted = await deleteAuthor(database, { id: seal.id });
   if (deleted !== 1) {

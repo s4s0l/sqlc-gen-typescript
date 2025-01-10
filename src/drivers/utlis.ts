@@ -10,9 +10,11 @@ export function fieldName(
   if (column) {
     name = column.name;
   }
-  return name
-    .toLowerCase()
-    .replace(/([_][a-z])/g, (group) => group.toUpperCase().replace("_", ""));
+  return name;
+  // I understand why someone would like this, but i prefer that grepping can find
+  // both ts and sql usages.
+  // .toLowerCase()
+  // .replace(/([_][a-z])/g, (group) => group.toUpperCase().replace("_", ""));
 }
 
 export function argName(index: number, column?: Column): string {
